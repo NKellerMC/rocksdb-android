@@ -40,7 +40,7 @@ android {
     externalNativeBuild {
         cmake {
             path = File("$projectDir/zstd-${zstdVersion}/build/cmake/CMakeLists.txt")
-            version = "3.31.3"
+            version = "3.31.6"
         }
     }
 }
