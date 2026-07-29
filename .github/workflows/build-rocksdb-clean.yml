@@ -120,9 +120,20 @@ jobs:
 
       - name: Build zstd Android
         run: |
-          cd zstd/zstd-1.5.7/build/cmake
-          mkdir -p build
-          cd build
+          echo "=== Procurando zstd ==="
+          find . -maxdepth 4 -type d -name "zstd*" || true
+
+          ZSTD_DIR=$(find . -type f -name CMakeLists.txt | grep zstd | head -1 | xargs dirname)
+
+          if [ -z "$ZSTD_DIR" ]; then
+            echo "❌ zstd não encontrado"
+            exit 1
+          fi
+
+          echo "✅ zstd encontrado em: $ZSTD_DIR"
+
+          mkdir -p "$ZSTD_DIR/build"
+          cd "$ZSTD_DIR/build"
 
           cmake .. \
             -DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK/build/cmake/android.toolchain.cmake \
@@ -132,11 +143,13 @@ jobs:
             -DZSTD_BUILD_PROGRAMS=OFF \
             -DZSTD_BUILD_TESTS=OFF \
             -DZSTD_BUILD_SHARED=ON \
-            -DCMAKE_LIBRARY_OUTPUT_DIRECTORY=$GITHUB_WORKSPACE/zstd/zstd-1.5.7/build/cmake/build
+            -DCMAKE_LIBRARY_OUTPUT_DIRECTORY=$GITHUB_WORKSPACE/zstd-output
 
           cmake --build . --config Release
 
-          find . -name "libzstd*.so"
+          echo "=== Resultado zstd ==="
+          find . -name "libzstd*.so" || true
+          find $GITHUB_WORKSPACE -name "libzstd*.so" || true
 
       - name: Debug zstd output
         run: |
