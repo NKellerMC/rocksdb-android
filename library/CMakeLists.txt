@@ -14,7 +14,7 @@ set(BZIP2_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../bz2/bzip2-1.0.8")
 set(BZIP2_LIBRARIES "${CMAKE_CURRENT_SOURCE_DIR}/../bz2/build/intermediates/library_and_local_jars_jni/release/copyReleaseJniLibsProjectAndLocalJars/jni/${ANDROID_ABI}/libbz2.so")
 
 set(ZSTD_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/../zstd/zstd-1.5.7/lib")
-set(ZSTD_LIBRARIES "${CMAKE_CURRENT_SOURCE_DIR}/../zstd/build/intermediates/library_and_local_jars_jni/release/copyReleaseJniLibsProjectAndLocalJars/jni/${ANDROID_ABI}/libzstd.so")
+set(ZSTD_LIBRARIES "${CMAKE_CURRENT_SOURCE_DIR}/../zstd/zstd-1.5.7/build/cmake/build/libzstd.so")
 
 include_directories(${lz4_ROOT_DIR}/lib)
 include_directories(${Snappy_ROOT_DIR})
