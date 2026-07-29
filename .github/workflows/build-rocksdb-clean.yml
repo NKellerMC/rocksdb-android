@@ -149,6 +149,7 @@ jobs:
           cd build-rocksdb
 
           cmake ../rocksdb \
+            -DCMAKE_CXX_FLAGS="-Wno-error=unused-but-set-variable" \
             -DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK/build/cmake/android.toolchain.cmake \
             -DANDROID_ABI=arm64-v8a \
             -DANDROID_PLATFORM=android-21 \
@@ -190,6 +191,7 @@ jobs:
           cd build-rocksdb
 
           cmake ../rocksdb \
+            -DCMAKE_CXX_FLAGS="-Wno-error=unused-but-set-variable" \
             -DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK/build/cmake/android.toolchain.cmake \
             -DANDROID_ABI=arm64-v8a \
             -DANDROID_PLATFORM=android-21 \
@@ -228,6 +230,7 @@ jobs:
           cd build-rocksdb
 
           cmake ../rocksdb \
+            -DCMAKE_CXX_FLAGS="-Wno-error=unused-but-set-variable" \
             -DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK/build/cmake/android.toolchain.cmake \
             -DANDROID_ABI=arm64-v8a \
             -DANDROID_PLATFORM=android-21 \
