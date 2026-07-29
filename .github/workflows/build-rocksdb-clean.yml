@@ -118,7 +118,7 @@ jobs:
           find snappy -maxdepth 2
           find zstd -maxdepth 2
 
-            - name: Build zstd Android
+      - name: Build zstd Android
         run: |
           echo "=== Encontrando zstd raiz ==="
 
