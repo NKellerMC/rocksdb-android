@@ -8,35 +8,85 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          submodules: recursive
+
+      - name: Clone RocksDB
+        run: |
+          rm -rf rocksdb
+          git clone --depth 1 https://github.com/marykdb/rocksdb.git rocksdb
+          cd rocksdb
+          git submodule update --init --recursive || true
 
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: 21
+          java-version: "21"
+          cache: gradle
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: Install Android tools
+      - name: Install Android SDK Components
         run: |
-          sdkmanager "platform-tools" \
+          yes | sdkmanager --licenses
+
+          sdkmanager \
+            "platform-tools" \
             "platforms;android-35" \
             "build-tools;35.0.0" \
             "cmake;3.31.6" \
             "ndk;29.0.14206865"
 
-      - name: Build
+      - name: Verify installation
         run: |
-          chmod +x gradlew
-          ./gradlew :library:assembleRelease
+          java -version
+          cmake --version || true
+          ls -lah "$ANDROID_SDK_ROOT/cmake"
+          ls -lah "$ANDROID_SDK_ROOT/ndk"
+
+      - name: Make Gradle executable
+        run: chmod +x gradlew
+
+      - name: Build RocksDB Android
+        env:
+          ANDROID_NDK_HOME: ${{ env.ANDROID_SDK_ROOT }}/ndk/29.0.14206865
+          ANDROID_NDK_ROOT: ${{ env.ANDROID_SDK_ROOT }}/ndk/29.0.14206865
+        run: |
+          ./gradlew \
+            clean \
+            :library:assembleRelease \
+            --stacktrace \
+            --info
+
+      - name: List outputs
+        if: always()
+        run: |
+          find . -type f | grep -Ei "\.(aar|so|jar)$" || true
 
       - name: Upload AAR
+        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: rocksdb-android-aar
-          path: library/build/outputs/aar/*.aar
+          path: |
+            library/build/outputs/aar/*.aar
+
+      - name: Upload Native Libraries
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rocksdb-native-libs
+          path: |
+            **/*.so
+
+      - name: Upload Build Logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gradle-logs
+          path: |
+            **/build/reports/**
+            **/build/outputs/logs/**
+            **/*.log
