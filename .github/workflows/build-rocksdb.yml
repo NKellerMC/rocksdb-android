@@ -155,3 +155,5 @@ rm snappy.tar.gz
             **/build/outputs/logs/**
             **/*.log
 # trigger fix
+
+# workflow dispatch refresh
