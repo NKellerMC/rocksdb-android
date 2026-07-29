@@ -128,12 +128,20 @@ jobs:
             -DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK/build/cmake/android.toolchain.cmake \
             -DANDROID_ABI=arm64-v8a \
             -DANDROID_PLATFORM=android-21 \
+            -DCMAKE_BUILD_TYPE=Release \
             -DZSTD_BUILD_PROGRAMS=OFF \
             -DZSTD_BUILD_TESTS=OFF \
-            -DZSTD_BUILD_SHARED=ON
+            -DZSTD_BUILD_SHARED=ON \
+            -DCMAKE_LIBRARY_OUTPUT_DIRECTORY=$GITHUB_WORKSPACE/zstd/zstd-1.5.7/build/cmake/build
 
-          cmake --build .
+          cmake --build . --config Release
 
+          find . -name "libzstd*.so"
+
+      - name: Debug zstd output
+        run: |
+          find zstd -type f | grep -E "libzstd|\.so" || true
+          find zstd -type d | grep build || true
       - name: Build RocksDB Android
         env:
           ANDROID_NDK_HOME: ${{ env.ANDROID_SDK_ROOT }}/ndk/29.0.14206865
