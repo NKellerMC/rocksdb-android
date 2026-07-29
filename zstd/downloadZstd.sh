@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -ex
 
 # downloadZstd.sh: Downloads zstd tarball and verifies its SHA checksum
 
