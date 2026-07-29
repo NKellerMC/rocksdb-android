@@ -76,7 +76,7 @@ jobs:
           ls -lah snappy
           ls -lah zstd
 
-          test -d snappy/snappy-1.2.1
+          test -d snappy/snappy-1.2.2
 
       - name: Verify downloaded sources
         run: |
