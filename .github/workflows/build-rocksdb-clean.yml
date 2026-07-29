@@ -76,7 +76,12 @@ jobs:
 
           tar -xzf snappy.tar.gz -C snappy
 
-          mv snappy/snappy-1.2.2 snappy/snappy-1.2.2
+            FOUND=$(find snappy -maxdepth 3 -type d -name "snappy-1.2.2" | head -1)
+
+            if [ "$FOUND" != "snappy/snappy-1.2.2" ]; then
+              rm -rf snappy/snappy-1.2.2
+              mv "$FOUND" snappy/snappy-1.2.2
+            fi
 
           rm snappy.tar.gz
 
