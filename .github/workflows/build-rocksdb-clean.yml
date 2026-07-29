@@ -141,11 +141,9 @@ jobs:
 
           echo "=== Resultado zstd ==="
           find "$GITHUB_WORKSPACE" -name "libzstd*.so" || true
-
-
       - name: Build RocksDB Android
         run: |
-          echo "=== Configurando RocksDB com ZSTD ==="
+          echo "=== Configurando RocksDB sem gflags ==="
 
           mkdir -p build-rocksdb
           cd build-rocksdb
@@ -156,22 +154,32 @@ jobs:
             -DANDROID_PLATFORM=android-21 \
             -DCMAKE_BUILD_TYPE=Release \
             -DWITH_ZSTD=ON \
+            -DWITH_GFLAGS=OFF \
+            -DWITH_TESTS=OFF \
+            -DWITH_BENCHMARK_TOOLS=OFF \
+            -DWITH_TOOLS=OFF \
             -DZSTD_LIBRARY=$GITHUB_WORKSPACE/zstd-output/libzstd.so \
             -DZSTD_INCLUDE_DIR=$GITHUB_WORKSPACE/zstd-1.5.7/lib
 
           cmake --build . --config Release -j$(nproc)
 
-          echo "=== Procurando librocksdb ==="
-          find . -name "librocksdb*.so" || true
+          echo "=== Procurando librocksdb.so ==="
+          find . -name "librocksdb.so"
 
-          mkdir -p ../jniLibs/arm64-v8a
+          mkdir -p ../output/arm64-v8a
 
-          find . -name "librocksdb*.so" -exec cp {} ../jniLibs/arm64-v8a/ \;
+          cp $(find . -name "librocksdb.so" | head -1) ../output/arm64-v8a/
 
-          cp $GITHUB_WORKSPACE/zstd-output/libzstd.so ../jniLibs/arm64-v8a/
+          cp $GITHUB_WORKSPACE/zstd-output/libzstd.so ../output/arm64-v8a/
 
-          echo "=== Resultado nativo ==="
-          find ../jniLibs -name "*.so"
+          echo "=== SO FINAL ==="
+          find ../output -name "*.so"
+
+
+      - name: Package SO
+        run: |
+          cd output
+          zip -r rocksdb-android-arm64.zip .
 
 
       - name: Build RocksDB Android
