@@ -66,8 +66,21 @@ jobs:
 
           ./bz2/downloadBz2.sh 1.0.8 ab5a03176ee106d3f0fa90e381da478ddae405918153cca248e682cd0c4a2269
           ./lz4/downloadLz4.sh 1.10.0
-          ./snappy/downloadSnappy.sh 1.2.2 90f74bc1fbf78a6c56b3c4a082a05103b3a56bb17bca1a27e052ea11723292dc
-          ./zstd/downloadZstd.sh 1.5.7 eb33e51f49a15e023950cd7825ca74a4a2b43db8354825ac24fc1b7ee09e6fa3
+          echo "=== Baixando Snappy manualmente ==="
+
+rm -rf snappy/snappy-1.2.2
+
+mkdir -p snappy
+
+curl -L -o snappy.tar.gz https://github.com/google/snappy/archive/refs/tags/1.2.2.tar.gz
+
+tar -xzf snappy.tar.gz -C snappy
+
+mv snappy/snappy-1.2.2 snappy/snappy-1.2.2
+
+rm snappy.tar.gz
+
+./zstd/downloadZstd.sh 1.5.7 eb33e51f49a15e023950cd7825ca74a4a2b43db8354825ac24fc1b7ee09e6fa3
 
           echo "=== Verificando ==="
 
