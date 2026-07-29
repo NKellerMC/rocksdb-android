@@ -118,6 +118,22 @@ jobs:
           find snappy -maxdepth 2
           find zstd -maxdepth 2
 
+      - name: Build zstd Android
+        run: |
+          cd zstd/zstd-1.5.7/build/cmake
+          mkdir -p build
+          cd build
+
+          cmake .. \
+            -DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK/build/cmake/android.toolchain.cmake \
+            -DANDROID_ABI=arm64-v8a \
+            -DANDROID_PLATFORM=android-21 \
+            -DZSTD_BUILD_PROGRAMS=OFF \
+            -DZSTD_BUILD_TESTS=OFF \
+            -DZSTD_BUILD_SHARED=ON
+
+          cmake --build .
+
       - name: Build RocksDB Android
         env:
           ANDROID_NDK_HOME: ${{ env.ANDROID_SDK_ROOT }}/ndk/29.0.14206865
