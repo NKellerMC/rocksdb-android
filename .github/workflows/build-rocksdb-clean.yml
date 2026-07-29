@@ -68,19 +68,19 @@ jobs:
           ./lz4/downloadLz4.sh 1.10.0
           echo "=== Baixando Snappy manualmente ==="
 
-rm -rf snappy/snappy-1.2.2
+          rm -rf snappy/snappy-1.2.2
 
-mkdir -p snappy
+          mkdir -p snappy
 
-curl -L -o snappy.tar.gz https://github.com/google/snappy/archive/refs/tags/1.2.2.tar.gz
+          curl -L -o snappy.tar.gz https://github.com/google/snappy/archive/refs/tags/1.2.2.tar.gz
 
-tar -xzf snappy.tar.gz -C snappy
+          tar -xzf snappy.tar.gz -C snappy
 
-mv snappy/snappy-1.2.2 snappy/snappy-1.2.2
+          mv snappy/snappy-1.2.2 snappy/snappy-1.2.2
 
-rm snappy.tar.gz
+          rm snappy.tar.gz
 
-./zstd/downloadZstd.sh 1.5.7 eb33e51f49a15e023950cd7825ca74a4a2b43db8354825ac24fc1b7ee09e6fa3
+          ./zstd/downloadZstd.sh 1.5.7 eb33e51f49a15e023950cd7825ca74a4a2b43db8354825ac24fc1b7ee09e6fa3
 
           echo "=== Verificando ==="
 
