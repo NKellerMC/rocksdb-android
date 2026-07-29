@@ -119,83 +119,33 @@ jobs:
           find zstd -maxdepth 2
 
       - name: Build zstd Android
-        run: |
-          echo "=== Procurando zstd ==="
-          find . -maxdepth 4 -type d -name "zstd*" || true
+  run: |
+    echo "=== Encontrando zstd raiz ==="
 
-          ZSTD_DIR=$(find . -type f -name CMakeLists.txt | grep zstd | head -1 | xargs dirname)
+    ZSTD_DIR=$(find . -path "*/zstd-1.5.7/build/cmake/CMakeLists.txt" | head -1 | xargs dirname)
 
-          if [ -z "$ZSTD_DIR" ]; then
-            echo "❌ zstd não encontrado"
-            exit 1
-          fi
+    if [ -z "$ZSTD_DIR" ]; then
+      echo "❌ CMake raiz do zstd não encontrado"
+      find . -name CMakeLists.txt | grep zstd
+      exit 1
+    fi
 
-          echo "✅ zstd encontrado em: $ZSTD_DIR"
+    echo "✅ zstd raiz: $ZSTD_DIR"
 
-          mkdir -p "$ZSTD_DIR/build"
-          cd "$ZSTD_DIR/build"
+    mkdir -p "$ZSTD_DIR/build/android"
+    cd "$ZSTD_DIR/build/android"
 
-          cmake .. \
-            -DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK/build/cmake/android.toolchain.cmake \
-            -DANDROID_ABI=arm64-v8a \
-            -DANDROID_PLATFORM=android-21 \
-            -DCMAKE_BUILD_TYPE=Release \
-            -DZSTD_BUILD_PROGRAMS=OFF \
-            -DZSTD_BUILD_TESTS=OFF \
-            -DZSTD_BUILD_SHARED=ON \
-            -DCMAKE_LIBRARY_OUTPUT_DIRECTORY=$GITHUB_WORKSPACE/zstd-output
+    cmake ../.. \
+      -DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK/build/cmake/android.toolchain.cmake \
+      -DANDROID_ABI=arm64-v8a \
+      -DANDROID_PLATFORM=android-21 \
+      -DCMAKE_BUILD_TYPE=Release \
+      -DZSTD_BUILD_PROGRAMS=OFF \
+      -DZSTD_BUILD_TESTS=OFF \
+      -DZSTD_BUILD_SHARED=ON \
+      -DCMAKE_LIBRARY_OUTPUT_DIRECTORY=$GITHUB_WORKSPACE/zstd-output
 
-          cmake --build . --config Release
+    cmake --build . --config Release
 
-          echo "=== Resultado zstd ==="
-          find . -name "libzstd*.so" || true
-          find $GITHUB_WORKSPACE -name "libzstd*.so" || true
-
-      - name: Debug zstd output
-        run: |
-          find zstd -type f | grep -E "libzstd|\.so" || true
-          find zstd -type d | grep build || true
-      - name: Build RocksDB Android
-        env:
-          ANDROID_NDK_HOME: ${{ env.ANDROID_SDK_ROOT }}/ndk/29.0.14206865
-          ANDROID_NDK_ROOT: ${{ env.ANDROID_SDK_ROOT }}/ndk/29.0.14206865
-        run: |
-          ./gradlew \
-            clean \
-            :library:assembleRelease \
-            --stacktrace \
-            --info
-
-      - name: List outputs
-        if: always()
-        run: |
-          find . -type f | grep -Ei "\.(aar|so|jar)$" || true
-
-      - name: Upload AAR
-        if: success()
-        uses: actions/upload-artifact@v4
-        with:
-          name: rocksdb-android-aar
-          path: |
-            library/build/outputs/aar/*.aar
-
-      - name: Upload Native Libraries
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: rocksdb-native-libs
-          path: |
-            **/*.so
-
-      - name: Upload Build Logs
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: gradle-logs
-          path: |
-            **/build/reports/**
-            **/build/outputs/logs/**
-            **/*.log
-# trigger fix
-
-# workflow dispatch refresh
+    echo "=== Resultado zstd ==="
+    find "$GITHUB_WORKSPACE" -name "libzstd*.so" || true

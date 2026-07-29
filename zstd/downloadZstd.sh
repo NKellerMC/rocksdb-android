@@ -28,7 +28,16 @@ if [ ! -d "${TARGET_DIR}" ]; then
       exit 1
     fi
 
+    if command -v bsdtar >/dev/null 2>&1; then
+    echo "Extracting with bsdtar..."
+    bsdtar -xzf "$TMP_FILE" -C "./"
+elif command -v busybox >/dev/null 2>&1; then
+    echo "Extracting with BusyBox tar..."
+    busybox tar -xzf "$TMP_FILE" -C "./"
+else
+    echo "Extracting with GNU tar..."
     tar -C "./" -xzf "$TMP_FILE"
+fi
     rm "$TMP_FILE"
     echo "zstd ${ZSTD_VERSION} downloaded and extracted successfully!"
 else
