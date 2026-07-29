@@ -154,3 +154,4 @@ rm snappy.tar.gz
             **/build/reports/**
             **/build/outputs/logs/**
             **/*.log
+# trigger fix
