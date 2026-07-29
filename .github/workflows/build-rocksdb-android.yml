@@ -76,6 +76,21 @@ jobs:
           ls -lah snappy
           ls -lah zstd
 
+          
+          echo "=== Corrigindo estrutura Snappy ==="
+
+          if [ ! -d snappy/snappy-1.2.2 ]; then
+            FOUND=$(find snappy -maxdepth 3 -type d -name "snappy-1.2.2" | head -1 || true)
+
+            if [ -n "$FOUND" ]; then
+              mv "$FOUND" snappy/snappy-1.2.2
+            else
+              echo "Snappy não encontrado após download"
+              find snappy -maxdepth 3 -type d
+              exit 1
+            fi
+          fi
+
           test -d snappy/snappy-1.2.2
 
       - name: Verify downloaded sources
