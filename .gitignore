@@ -29,3 +29,5 @@ rocksdb-android-arm64/
 rocksdb-android-arm64-libs/
 *.so
 *.zip
+rocksdb-android-arm64/
+rocksdb-android-arm64-libs/
