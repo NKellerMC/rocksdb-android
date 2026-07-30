@@ -21,25 +21,4 @@ include_directories(${Snappy_ROOT_DIR})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../snappy/include)
 
 # Include the RocksDB project
-
 add_subdirectory(../rocksdb rocksdb-build)
-
-file(GLOB ROCKSJNI_SOURCES
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/main/cpp/*.cc"
-)
-
-add_library(rocksdbjni SHARED
-    ${ROCKSJNI_SOURCES}
-)
-
-target_include_directories(rocksdbjni PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/main/cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../rocksdb/include
-    ${CMAKE_CURRENT_SOURCE_DIR}/../rocksdb
-)
-
-target_link_libraries(rocksdbjni
-    rocksdb
-    log
-)
-
