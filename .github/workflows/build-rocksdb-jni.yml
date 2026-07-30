@@ -228,12 +228,6 @@ jobs:
               echo "=== SO FINAL ==="
               find ../output -name "*.so"
 
-      - name: Package SO
-        run: |
-          cd output
-          zip -r rocksdb-android-arm64.zip .
-
-
       - name: Build RocksDB Android
         run: |
           echo "=== Build RocksDB ==="
