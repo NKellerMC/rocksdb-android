@@ -216,18 +216,17 @@ jobs:
 
             cd ..
 
-echo "=== Procurando librocksdb.so ==="
-          find . -name "librocksdb.so"
+              echo "=== Procurando librocksdb.so ==="
+              find . -name "librocksdb.so"
 
-          mkdir -p ../output/arm64-v8a
+              mkdir -p ../output/arm64-v8a
 
-          cp $(find . -name "librocksdb.so" | head -1) ../output/arm64-v8a/
+              cp $(find . -name "librocksdb.so" | head -1) ../output/arm64-v8a/
 
-          cp $GITHUB_WORKSPACE/zstd-output/libzstd.so ../output/arm64-v8a/
+              cp $GITHUB_WORKSPACE/zstd-output/libzstd.so ../output/arm64-v8a/
 
-          echo "=== SO FINAL ==="
-          find ../output -name "*.so"
-
+              echo "=== SO FINAL ==="
+              find ../output -name "*.so"
 
       - name: Package SO
         run: |
