@@ -23,3 +23,9 @@ lz4/build
 /bz2/build/
 /zstd/zstd-*/
 /zstd/build/
+
+# Native build outputs
+rocksdb-android-arm64/
+rocksdb-android-arm64-libs/
+*.so
+*.zip
