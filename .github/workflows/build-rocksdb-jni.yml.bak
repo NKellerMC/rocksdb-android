@@ -250,42 +250,37 @@ jobs:
             mkdir -p build-jni
             cd build-jni
 
-            python3 - <<'PY'
-            from pathlib import Path
-            from textwrap import dedent
-            Path("CMakeLists.txt").write_text(dedent(r"""
-                        cmake_minimum_required(VERSION 3.10)
+            cat > CMakeLists.txt <<'EOF'
+            cmake_minimum_required(VERSION 3.10)
 
-                        project(rocksdbjni)
+            project(rocksdbjni)
 
-                        add_library(rocksdbjni SHARED
-                            ../rocksdb/java/rocksjni/rocksjni.cc
-                            ../rocksdb/java/rocksjni/backupenginejni.cc
-                            ../rocksdb/java/rocksjni/cache.cc
-                            ../rocksdb/java/rocksjni/checkpoint.cc
-                            ../rocksdb/java/rocksjni/columnfamilyhandle.cc
-                            ../rocksdb/java/rocksjni/comparator.cc
-                            ../rocksdb/java/rocksjni/env.cc
-                            ../rocksdb/java/rocksjni/iterator.cc
-                            ../rocksdb/java/rocksjni/options.cc
-                            ../rocksdb/java/rocksjni/rocks_callback_object.cc
-                            ../rocksdb/java/rocksjni/slice.cc
-                            ../rocksdb/java/rocksjni/write_batch.cc
-                        )
+            add_library(rocksdbjni SHARED
+                ../rocksdb/java/rocksjni/rocksjni.cc
+                ../rocksdb/java/rocksjni/backupenginejni.cc
+                ../rocksdb/java/rocksjni/cache.cc
+                ../rocksdb/java/rocksjni/checkpoint.cc
+                ../rocksdb/java/rocksjni/columnfamilyhandle.cc
+                ../rocksdb/java/rocksjni/comparator.cc
+                ../rocksdb/java/rocksjni/env.cc
+                ../rocksdb/java/rocksjni/iterator.cc
+                ../rocksdb/java/rocksjni/options.cc
+                ../rocksdb/java/rocksjni/rocks_callback_object.cc
+                ../rocksdb/java/rocksjni/slice.cc
+                ../rocksdb/java/rocksjni/write_batch.cc
+            )
 
-                        target_include_directories(rocksdbjni PRIVATE
-                            ../rocksdb/include
-                            ../rocksdb
-                            ../rocksdb/java/rocksjni
-                        )
+            target_include_directories(rocksdbjni PRIVATE
+                ../rocksdb/include
+                ../rocksdb
+                ../rocksdb/java/rocksjni
+            )
 
-                        target_link_libraries(rocksdbjni
-                            rocksdb
-                            log
-                        )
-            """))
-            print("CMakeLists.txt criado")
-            PY
+            target_link_libraries(rocksdbjni
+                rocksdb
+                log
+            )
+EOF
             cmake . \
               -DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK/build/cmake/android.toolchain.cmake \
               -DANDROID_ABI=arm64-v8a \
